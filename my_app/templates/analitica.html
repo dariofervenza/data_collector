@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}
+Análisis de datos
+{% endblock %}
+
+{% block content %}
+<!-- Habria que usar las etiquetas main, section y article para ser mas ordenados-->
+
+
+<div id="temp_media_container">
+    <div id="temperatura_media_sensor1"></div>
+    <div id="temperatura_media_sensor2"></div>
+    <div id="temperatura_media_sensor3"></div>
+</div>
+<div id="humedad_media_container">
+    <div id="humedad_media_sensor1"></div>
+    <div id="humedad_media_sensor2"></div>
+    <div id="humedad_media_sensor3"></div>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    function updatePlotlyFigure() {
+        
+        $.ajax({
+            type: 'GET',
+            url: '/send_temperatura_media_sensor1?opcion=1' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('temperatura_media_sensor1', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_temperatura_media_sensor1?opcion=2' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('temperatura_media_sensor2', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_temperatura_media_sensor1?opcion=3' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('temperatura_media_sensor3', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_humedad_media_sensor1?opcion=1' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('humedad_media_sensor1', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_humedad_media_sensor1?opcion=2' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('humedad_media_sensor2', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_humedad_media_sensor1?opcion=3' ,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('humedad_media_sensor3', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });  
+    }
+    updatePlotlyFigure();
+    var dropdown = document.getElementById('filter');
+    dropdown.addEventListener('change', updatePlotlyFigure);
+    setInterval(updatePlotlyFigure, 60 * 1000);
+
+
+
+</script>
+
+
+
+{% endblock %}

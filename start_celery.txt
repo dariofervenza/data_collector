@@ -1,0 +1,2 @@
+celery -A interview worker --loglevel=info --pool=eventlet
+celery -A interview beat --loglevel=info

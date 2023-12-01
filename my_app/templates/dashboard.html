@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+<!-- Habria que usar las etiquetas main, section y article para ser mas ordenados-->
+<label for="filter">Ciudad:</label>
+<select id="filter">
+    <option value="1">Vigo</option>
+    <option value="2">Lugo</option>
+    <option value="3">Madrid</option>
+</select>
+<label for="filter_modelo">Modelo predictivo:</label>
+<select id="filter_modelo">
+    <option value="exponential">ExponentialSmoothing</option>
+    <option value="arima">ARIMA</option>
+
+    <option value="theta">Theta</option>
+</select>
+<div id="original_values">
+    <div id="chart"></div>
+    <div id="chart_humedad"></div>
+</div>
+<div id="predicted_values">
+    <div id="chart_predict"></div>
+    <div id="chart_predict_humedad"></div>
+
+</div>
+
+
+
+
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    function updatePlotlyFigure() {
+        var opcion = document.getElementById('filter').value;
+        var modelo = document.getElementById('filter_modelo').value;
+        $.ajax({
+            type: 'GET',
+            url: '/send_chart_data?opcion=' + opcion + '&modelo=' + modelo,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('chart', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_chart_data_humedad?opcion=' + opcion + '&modelo=' + modelo,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('chart_humedad', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_chart_data_predict?opcion=' + opcion + '&modelo=' + modelo,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('chart_predict', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '/send_chart_data_predict_humedad?opcion=' + opcion + '&modelo=' + modelo,  
+            success: function(data) {
+
+                var figureData = data.figure;
+                var figure = JSON.parse(figureData);
+                Plotly.newPlot('chart_predict_humedad', figure.data, figure.layout);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        }); 
+    
+    }
+
+    updatePlotlyFigure();
+    var dropdown = document.getElementById('filter');
+    dropdown.addEventListener('change', updatePlotlyFigure);
+    var dropdown_modelo = document.getElementById('filter_modelo');
+    dropdown_modelo.addEventListener('change', updatePlotlyFigure);
+    setInterval(updatePlotlyFigure, 5000);
+
+
+
+</script>
+
+
+
+
+
+{% endblock %}

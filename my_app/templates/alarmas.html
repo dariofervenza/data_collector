@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}
+Alarmas
+{% endblock %}
+
+{% block content %}
+<!-- Habria que usar las etiquetas main, section y article para ser mas ordenados-->
+<h1>Crear nueva alarma</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ formulario_alarmas.as_p }}
+    <div id="boton_anadir_alarma">
+        <button type="submit">Añadir alarma</button>
+    </div>
+    
+</form>
+<h1>Alarmas creadas</h1>
+<table>
+    <thead>
+        <tr>
+            <th>id_alarma</th>
+            <th>usuario</th>
+            <th>sensor_id</th>
+            <th>tipo_alarma</th>
+            <th>tipo_de_medida</th>
+            <th>valor</th>
+            <th>fecha_creacion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in alarmas %}
+        <tr>
+            <td>{{ row.identificador }} </td>
+            <td>{{ row.usuario }} </td>
+            <td>{{ row.sensor_id.sensor_id }} </td>
+            <td>{{ row.tipo_alarma.tipo_alarma }} </td>
+            <td>{{ row.tipo_de_medida.tipo_de_medida }} </td>
+            <td>{{ row.valor }}</td>
+            <td>{{ row.fecha_creacion }} </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h1>Avisos</h1>
+<h4>Sugerencia de notificacion: ¿Por email con libreria smtp? --- ¿SOLO ALARMAS GRAVES?</h1>
+<div id="container_tabla_avisos">
+    <table id="tabla_avisos">
+        <thead>
+            <tr>
+                <th>usuario</th>
+                <th>sensor_id</th>
+                <th>tipo_alarma</th>
+                <th>tipo_de_medida</th>
+                <th>valor alarma</th>
+                <th>fecha_creacion</th>
+                <th>id_alarma</th>
+                <th>valor_sensor</th>
+                <th>fecha_sensor</th>
+                <th>leído</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in avisos %}
+            <tr>
+                <td>{{ row.usuario }} </td>
+                <td>{{ row.id_alarma.sensor_id.sensor_id }} </td>
+                <td>{{ row.id_alarma.tipo_alarma.tipo_alarma }} </td>
+                <td>{{ row.id_alarma.tipo_de_medida.tipo_de_medida }} </td>
+                <td>{{ row.id_alarma.valor }}</td>
+                <td>{{ row.id_alarma.fecha_creacion }} </td>
+                <td>{{ row.id_alarma.identificador }} </td>
+                <td>{{ row.valor_sensor }} </td>
+                <td>{{ row.fecha_sensor }} </td>
+                <td>
+                    {% if row.leido == False%}
+                    No   
+                    {% else %}
+                    Si
+                    {% endif%}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock %}
